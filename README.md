@@ -30,7 +30,7 @@ As a result, **citizens are often left unaware of when or how their issues are r
 
 ---
 
-## 💡Solution
+## 💡 Solution
 
 **Urban Care** provides a single, web-based grievance management platform where:
 
