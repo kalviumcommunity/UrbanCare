@@ -1,8 +1,4 @@
-
-
-export default function Home() {
-  return (
-    <h1>Urban Care</h1>
-    
-  );
+export default function Page() {
+  console.log("hello");
+  return <h1>Urban Care</h1>;
 }
