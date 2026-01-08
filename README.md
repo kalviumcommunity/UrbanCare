@@ -1,7 +1,3 @@
-Absolutely — I’ll **clean this up, standardize formatting, tighten the language, and make it look like a polished GitHub README section.**
-You can paste this directly 👍
-
----
 
 # 🏙️ Urban Care
 
