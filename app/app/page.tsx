@@ -1,15 +1,19 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main style={styles.container}>
-      <h1 style={styles.title}>Urban Care</h1>
-
-      <p style={styles.text}>
-        Transparent & accountable urban grievance redressal
-      </p>
+      <h1>Urban Care</h1>
+      <p>Transparent & accountable urban grievance redressal</p>
 
       <div style={styles.actions}>
-        <a href="/login" style={styles.primary}>Login</a>
-        <a href="/register" style={styles.secondary}>Register</a>
+        <Link href="/login" style={styles.primary}>
+          Login
+        </Link>
+
+        <Link href="/register" style={styles.secondary}>
+          Register
+        </Link>
       </div>
     </main>
   );
@@ -23,33 +27,24 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center" as const,
-    backgroundColor: "#f4f6f8",
-  },
-  title: {
-    fontSize: "3rem",
-    marginBottom: "10px",
-  },
-  text: {
-    maxWidth: "480px",
-    marginBottom: "30px",
-    color: "#555",
+    gap: "20px",
   },
   actions: {
     display: "flex",
-    gap: "15px",
+    gap: "16px",
   },
   primary: {
-    backgroundColor: "#2563eb",
-    color: "#ffffff",
+    background: "#2563eb",
+    color: "white",
     padding: "12px 24px",
     borderRadius: "6px",
     textDecoration: "none",
   },
   secondary: {
-    backgroundColor: "#e5e7eb",
-    color: "#111",
+    background: "#e5e7eb",
     padding: "12px 24px",
     borderRadius: "6px",
     textDecoration: "none",
+    color: "black",
   },
 };

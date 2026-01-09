@@ -1,46 +1,49 @@
+import styles from "./page.module.css";
+
 export default function LoginPage() {
   return (
-    <main style={styles.center}>
-      <form style={styles.card}>
-        <h2>Login</h2>
+    <div className={styles.container}>
+      {/* Left Section */}
+      <div className={styles.left}>
+        <div className={styles.logo}>UrbanCare</div>
 
-        <input type="email" placeholder="Email" style={styles.input} />
-        <input type="password" placeholder="Password" style={styles.input} />
+        <h1>Welcome Back</h1>
+        <p className={styles.subtitle}>
+          Sign in to access your citizen portal
+        </p>
 
-        <button style={styles.button}>Login</button>
-      </form>
-    </main>
+        <form className={styles.form}>
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com" />
+
+          <div className={styles.passwordRow}>
+            <label>Password</label>
+            <a href="#">Forgot password?</a>
+          </div>
+          <input type="password" placeholder="••••••••" />
+
+          <button type="submit">Sign In</button>
+        </form>
+
+        <p className={styles.register}>
+          Don’t have an account? <a href="/register">Register here</a>
+        </p>
+      </div>
+
+      {/* Right Section */}
+      <div className={styles.right}>
+        <h2>Your Voice Matters</h2>
+        <p>
+          Report civic issues, track progress, and help build a better city.
+          Every complaint brings us closer to transparent governance.
+        </p>
+
+        <div className={styles.stats}>
+          <span>24/7<br />Available</span>
+          <span>100%<br />Transparent</span>
+          <span>Secure<br />& Private</span>
+        </div>
+      </div>
+    </div>
   );
 }
-
-const styles = {
-  center: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f4f6f8",
-  },
-  card: {
-    backgroundColor: "#ffffff",
-    padding: "30px",
-    borderRadius: "8px",
-    width: "320px",
-    display: "flex",
-    flexDirection: "column" as const,
-    gap: "12px",
-  },
-  input: {
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-  },
-  button: {
-    backgroundColor: "#2563eb",
-    color: "#ffffff",
-    padding: "10px",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-};
