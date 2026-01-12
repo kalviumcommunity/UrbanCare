@@ -201,3 +201,10 @@ urban-care/
 **Urban Care modernizes grievance redressal by replacing opaque, manual processes with a transparent, traceable, and accountable web platform.**
 By enabling **direct interaction between citizens and officials**, the system improves service delivery and builds public trust.
 
+## Code Review Checklist
+- Code follows naming conventions
+- Functionality tested locally
+- No console errors or warnings
+- ESLint & Prettier checks pass
+- No sensitive data exposed
+
