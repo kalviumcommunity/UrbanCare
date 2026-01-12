@@ -14,8 +14,8 @@ Briefly explain the purpose of this PR.
 - [ ] Linked to corresponding issue
 
 
-
-feature/<name>
-fix/<name>
-chore/<name>
-docs/<name>
+## Branch Naming Conventions
+- `feature/<name>`
+- `fix/<name>`
+- `chore/<name>`
+- `docs/<name>`
