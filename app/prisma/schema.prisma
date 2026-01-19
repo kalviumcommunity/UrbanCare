@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CITIZEN
+  OFFICIAL
+}
+
+enum ComplaintStatus {
+  SUBMITTED
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  ESCALATED
+  CLOSED
+}
+
+enum MediaType {
+  IMAGE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String?  @unique
+  password  String
+  role      UserRole @default(CITIZEN)
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  complaintsRaised   Complaint[] @relation("CitizenComplaints")
+  complaintsAssigned Complaint[] @relation("OfficialComplaints")
+
+  statusLogs ComplaintStatusLog[]
+  feedbacks  Feedback[]
+
+  @@index([role])
+  @@index([departmentId])
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+
+  createdAt DateTime @default(now())
+
+  officials  User[]
+  complaints Complaint[]
+
+  @@index([name])
+}
+
+model Complaint {
+  id          String          @id @default(uuid())
+  complaintId String          @unique
+
+  title       String
+  description String
+
+  category    String
+  priority    Int             @default(3)
+  status      ComplaintStatus @default(SUBMITTED)
+
+  address     String?
+  latitude    Float?
+  longitude   Float?
+
+  citizenId String
+  citizen   User @relation("CitizenComplaints", fields: [citizenId], references: [id], onDelete: Cascade)
+
+  officialId String?
+  official   User? @relation("OfficialComplaints", fields: [officialId], references: [id], onDelete: SetNull)
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  slaHours   Int       @default(72)
+  dueAt      DateTime?
+  resolvedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  media    ComplaintMedia[]
+  logs     ComplaintStatusLog[]
+  feedback Feedback?
+
+  @@index([citizenId])
+  @@index([officialId])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model ComplaintMedia {
+  id          String   @id @default(uuid())
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  type       MediaType @default(IMAGE)
+  url        String
+  uploadedBy String?
+
+  createdAt DateTime @default(now())
+
+  @@index([complaintId])
+}
+
+model ComplaintStatusLog {
+  id          String          @id @default(uuid())
+  complaintId String
+  complaint   Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  oldStatus ComplaintStatus?
+  newStatus ComplaintStatus
+
+  comment     String?
+  updatedById String?
+  updatedBy   User? @relation(fields: [updatedById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([complaintId])
+  @@index([newStatus])
+  @@index([createdAt])
+}
+
+model Feedback {
+  id          String   @id @default(uuid())
+  complaintId String   @unique
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  citizenId String
+  citizen   User @relation(fields: [citizenId], references: [id], onDelete: Cascade)
+
+  rating  Int
+  message String?
+
+  createdAt DateTime @default(now())
+
+  @@index([citizenId])
+}
