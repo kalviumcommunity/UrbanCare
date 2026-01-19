@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.2",
     "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.1",
@@ -28,6 +29,7 @@
     "husky": "^8.0.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
+    "prisma": "^6.19.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
