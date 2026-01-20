@@ -1,12 +1,8 @@
-export default function CitizenDashboard() {
+export default function Dashboard() {
   return (
-    <main style={{ padding: "30px" }}>
+    <div className="container">
       <h2>Citizen Dashboard</h2>
-
-      <div style={{ marginTop: "20px", display: "flex", gap: "16px" }}>
-        <a href="/citizen/complaints">View Complaints</a>
-        <a href="/citizen/complaints/new">New Complaint</a>
-      </div>
-    </main>
+      <p>Welcome! Track your complaints here.</p>
+    </div>
   );
 }

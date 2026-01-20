@@ -1,15 +1,13 @@
-export default function RegisterPage() {
+import styles from "../auth.module.css";
+
+export default function Signup() {
   return (
-    <main className="center">
-      <form className="card">
-        <h2>Register</h2>
-
-        <input placeholder="Full Name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-
-        <button>Create Account</button>
-      </form>
-    </main>
+    <div className={styles.authBox}>
+      <h2>Sign Up</h2>
+      <input placeholder="Name" />
+      <input placeholder="Email" />
+      <input placeholder="Password" type="password" />
+      <button>Create Account</button>
+    </div>
   );
 }

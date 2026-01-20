@@ -1,27 +1,10 @@
 export default function NewComplaint() {
   return (
-    <main style={styles.container}>
-      <h2>Register New Complaint</h2>
-
-      <form style={styles.form}>
-        <input placeholder="Complaint Title" />
-        <textarea placeholder="Describe the issue" rows={4} />
-        <input type="file" />
-        <button>Submit Complaint</button>
-      </form>
-    </main>
+    <div className="container">
+      <h2>New Complaint</h2>
+      <input placeholder="Complaint Title" />
+      <textarea placeholder="Description"></textarea>
+      <button>Submit</button>
+    </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: "30px",
-  },
-  form: {
-    marginTop: "20px",
-    maxWidth: "400px",
-    display: "flex",
-    flexDirection: "column" as const,
-    gap: "12px",
-  },
-};
