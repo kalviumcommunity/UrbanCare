@@ -1,13 +1,18 @@
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
 }
 
 body {
-  font-family: system-ui, Arial, sans-serif;
-  background-color: #f4f6f8;
+  background: #f9fafb;
   color: #111;
+}
+
+main {
+  min-height: 90vh;
+  padding: 20px;
 }
 
 a {
@@ -15,10 +20,9 @@ a {
   color: inherit;
 }
 
-button {
-  cursor: pointer;
-}
-body {
-  font-family: system-ui, sans-serif;
-  background: #f4f6f8;
+/* Responsive helper */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
 }

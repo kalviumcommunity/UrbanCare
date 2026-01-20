@@ -1,16 +1,21 @@
+import Link from "next/link";
+
 export default function ComplaintsList() {
   return (
-    <main style={{ padding: "30px" }}>
-      <h2>My Complaints</h2>
+    <div className="container">
+      <h2>Your Complaints</h2>
+
+      <Link href="/citizen/complaints/new">
+        ➕ Register New Complaint
+      </Link>
 
       <ul style={{ marginTop: "20px" }}>
         <li>
-          <a href="/citizen/complaints/101">Road damage near school</a>
-        </li>
-        <li>
-          <a href="/citizen/complaints/102">Streetlight not working</a>
+          <Link href="/citizen/complaints/123">
+            Street Light Not Working
+          </Link>
         </li>
       </ul>
-    </main>
+    </div>
   );
 }
