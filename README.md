@@ -1,203 +1,62 @@
+📌 Handling Loading States and Error Boundaries
+📖 Overview
 
-# 🏙️ Urban Care
+In this module, I implemented loading skeletons and error boundaries in my Next.js App Router application to handle asynchronous data fetching gracefully. Instead of showing blank screens or crashing when errors occur, the app now provides user-friendly fallback UIs. This improves user experience, builds trust, and makes the application more resilient.
 
-### A MERN Stack Web Application for Urban Grievance Redressal
+⚙️ Implementation Summary
+1. Loading Skeleton
 
-## 📌 Overview
+To indicate data fetching progress, I created a loading.tsx file inside the route folder:
 
-**Urban Care** is a responsive, mobile-first web application built using the **MERN stack** to streamline grievance redressal in **Urban Local Bodies (ULBs)**.
+app/users/loading.tsx
 
-The platform enables **citizens to report civic issues digitally** and **officials to manage & resolve them efficiently**, ensuring:
 
-✔ Transparency
-✔ Traceability
-✔ Accountability
+This file displays a skeleton UI using simple CSS animations. When the page fetches data slowly, the skeleton layout appears first, giving users a visual structure of the content before it fully loads.
 
-—all **without relying on a traditional admin-controlled system.**
+Skeleton styles were added in globals.css using a pulse animation to simulate loading placeholders.
 
----
+2. Error Boundary
 
-## 🎯 Problem Statement
+To handle unexpected failures, I created an error.tsx file in the same route:
 
-Urban Local Bodies often face challenges such as:
+app/users/error.tsx
 
-* ❌ Lack of accessible grievance redressal channels
-* ❌ Poor visibility into complaint status
-* ❌ Delays due to manual handling
-* ❌ Low accountability of officials
 
-As a result, **citizens are often left unaware of when or how their issues are resolved.**
+If data fetching fails or an error is thrown in the page component, this file displays a friendly error message along with a Try Again button. The reset() function allows users to retry rendering the page without refreshing the browser.
 
----
+3. Data Fetch Simulation
 
-## 💡 Solution
+Inside app/users/page.tsx, I simulated a slow network using a timeout delay. I also tested failure scenarios by manually throwing an error to confirm that the error boundary works correctly.
 
-**Urban Care** provides a single, web-based grievance management platform where:
+🧪 Testing and Evidence
+✅ Loading State
 
-* 👤 **Citizens** can register complaints and track progress
-* 🏢 **Officials** can manage and resolve assigned issues
-* 🔍 **Every complaint stage is fully visible and traceable**
+Introduced a 2-second delay in data fetching.
 
-The system **minimizes dependency on centralized admin intervention** and encourages **direct citizen–official interaction.**
+Observed skeleton UI before content loads.
 
----
+Screenshot captured showing skeleton placeholders.
 
-## 👥 User Roles
+❌ Error State
 
-### 👤 Citizen
+Forced an error inside the page component.
 
-* Secure registration & login
-* Submit civic complaints
-* Upload images as evidence
-* Track complaint status in real time
-* View complaint history
-* Provide feedback after resolution
+Error boundary displayed fallback UI with retry button.
 
-### 🏢 Official
+Screenshot captured showing error message.
 
-* Login to official dashboard
-* View assigned complaints
-* Update complaint status
-* Upload resolution proof
-* Handle escalated complaints
-* Monitor SLA deadlines
+✔️ Success State
 
-### ❌ No Traditional Admin Role
+Removed forced error.
 
-Urban Care is designed as a **self-managed system**, where officials handle complaints directly instead of relying on a central admin panel.
+Data loaded normally after skeleton.
 
----
+Screenshot captured showing final content.
 
-## 🔄 Complaint Lifecycle
+💡 Reflection
 
-**Submitted → Assigned → In Progress → Resolved → Citizen Feedback**
+Implementing loading and error states significantly improves user experience. Skeleton loaders prevent confusion during slow network responses, while error boundaries ensure the application does not crash when something goes wrong. This approach keeps users informed, maintains trust, and makes the application feel professional and reliable.
 
-Each stage is timestamped and recorded to maintain a **complete audit trail.**
+🚀 Conclusion
 
----
-
-## ✨ Key Features
-
-### 📝 Complaint Registration
-
-* Category-based issue selection
-* Description & image upload
-* Auto-generated unique complaint ID
-
-### 🔍 Transparency
-
-* Real-time complaint tracking
-* Clearly visible workflow stages
-* Officer assignment visibility
-
-### ⏱️ Accountability
-
-* SLA-based resolution timelines
-* Automatic escalation on deadline breach
-* Officer-wise resolution tracking
-
-### 📊 Dashboards
-
-* **Citizen Dashboard** → personal complaint history
-* **Official Dashboard** → assigned complaints & status metrics
-
-### 📱 Responsive Web Design
-
-* Mobile-first UI
-* Smooth experience across devices
-* App-like UX with standard CSS
-
----
-
-## 🛠️ Technology Stack
-
-### 🌐 Frontend
-
-* React.js
-* React Router DOM
-* Axios
-* Next.js
-* Tailwind CSS
-
-### 🖥️ Backend
-
-* Node.js
-* Express.js
-* RESTful APIs
-
-### 🗄️ Database
-
-* MongoDB
-* Mongoose ODM
-
-### 🔐 Authentication & Security
-
-* JWT-based authentication
-* Password hashing with bcrypt
-* Role-based protected routes
-* Secure API access
-
----
-
-## 🗂️ Project Structure
-
-```
-urban-care/
-├── client/                     # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── routes/
-│   │   ├── styles/
-│   │   └── App.jsx
-│
-├── server/                     # Node + Express backend
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── config/
-│   │   └── db.js
-│   └── server.js
-│
-└── README.md
-```
-
----
-
-## 🧠 Why MERN Stack?
-
-* One language across frontend & backend (JavaScript)
-* Scalable & modular architecture
-* Industry-relevant tech
-* Ideal for full-stack & civic-tech learning
-
----
-
-## 🚀 Future Enhancements
-
-* Progressive Web App (PWA)
-* Push notifications
-* WhatsApp-based complaint submission
-* AI-based issue categorization
-* Multi-language support
-* Public transparency dashboards
-
----
-
-## 📌 Use Cases
-
-* Urban local governance systems
-* Smart city initiatives
-* College full-stack projects
-* Civic-tech hackathons
-* Digital governance simulations
-
----
-
-## 🏁 Conclusion
-
-**Urban Care modernizes grievance redressal by replacing opaque, manual processes with a transparent, traceable, and accountable web platform.**
-By enabling **direct interaction between citizens and officials**, the system improves service delivery and builds public trust.
-
+By using loading.tsx and error.tsx in the Next.js App Router, the application now gracefully handles asynchronous operations. This makes the UI more resilient and enhances overall usability.
