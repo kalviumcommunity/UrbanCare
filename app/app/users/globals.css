@@ -1,0 +1,26 @@
+.skeleton {
+  background: #e5e7eb;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+.title {
+  height: 24px;
+  width: 30%;
+}
+
+.line {
+  height: 16px;
+  width: 60%;
+}
+
+.short {
+  width: 40%;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
