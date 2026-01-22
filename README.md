@@ -8,7 +8,7 @@ In this module, I implemented loading skeletons and error boundaries in my Next.
 
 To indicate data fetching progress, I created a loading.tsx file inside the route folder:
 
-app/users/loading.tsx
+
 
 
 This file displays a skeleton UI using simple CSS animations. When the page fetches data slowly, the skeleton layout appears first, giving users a visual structure of the content before it fully loads.
@@ -19,14 +19,14 @@ Skeleton styles were added in globals.css using a pulse animation to simulate lo
 
 To handle unexpected failures, I created an error.tsx file in the same route:
 
-app/users/error.tsx
+
 
 
 If data fetching fails or an error is thrown in the page component, this file displays a friendly error message along with a Try Again button. The reset() function allows users to retry rendering the page without refreshing the browser.
 
 3. Data Fetch Simulation
 
-Inside app/users/page.tsx, I simulated a slow network using a timeout delay. I also tested failure scenarios by manually throwing an error to confirm that the error boundary works correctly.
+I simulated a slow network using a timeout delay. I also tested failure scenarios by manually throwing an error to confirm that the error boundary works correctly.
 
 🧪 Testing and Evidence
 ✅ Loading State
