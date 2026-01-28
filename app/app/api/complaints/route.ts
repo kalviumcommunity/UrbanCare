@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { sendSuccess, sendError } from "@/lib/responseHandler";
+import { ERROR_CODES } from "@/lib/errorCode";
 
 const prisma = new PrismaClient();
 
 /**
  * GET /api/complaints
- * Fetch all complaints (pagination ready)
  */
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -18,12 +18,14 @@ export async function GET(req: Request) {
     orderBy: { createdAt: "desc" },
   });
 
-  return NextResponse.json({ page, limit, complaints });
+  return sendSuccess(
+    { page, limit, complaints },
+    "Complaints fetched successfully"
+  );
 }
 
 /**
  * POST /api/complaints
- * Create a new complaint (transactional)
  */
 export async function POST(req: Request) {
   try {
@@ -31,9 +33,10 @@ export async function POST(req: Request) {
       await req.json();
 
     if (!title || !description || !category || !citizenId) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
+      return sendError(
+        "Missing required fields",
+        ERROR_CODES.VALIDATION_ERROR,
+        400
       );
     }
 
@@ -71,14 +74,17 @@ export async function POST(req: Request) {
       return created;
     });
 
-    return NextResponse.json(
-      { message: "Complaint created successfully", complaint },
-      { status: 201 }
+    return sendSuccess(
+      complaint,
+      "Complaint created successfully",
+      201
     );
   } catch (err) {
-    return NextResponse.json(
-      { error: "Failed to create complaint" },
-      { status: 500 }
+    return sendError(
+      "Failed to create complaint",
+      ERROR_CODES.DATABASE_ERROR,
+      500,
+      err
     );
   }
 }
