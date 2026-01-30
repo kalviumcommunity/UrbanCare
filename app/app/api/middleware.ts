@@ -1,36 +1,25 @@
-// import { NextResponse } from "next/server";
-// import type { NextRequest } from "next/server";
-// import jwt from {jsonwebtoken} ;
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-// const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const token = req.cookies.get("token")?.value;
 
-// export function middleware(req: NextRequest) {
-//   const { pathname } = req.nextUrl;
+  // Public routes
+  if (pathname === "/" || pathname.startsWith("/login")) {
+    return NextResponse.next();
+  }
 
-//   if (pathname.startsWith("/api/admin") || pathname.startsWith("/api/users")) {
+  // Protected routes
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/users")) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
 
-//     const authHeader = req.headers.get("authorization");
-//     const token = authHeader?.split(" ")[1];
+  return NextResponse.next();
+}
 
-//     if (!token) {
-//       return NextResponse.json({ message: "Token missing" }, { status: 401 });
-//     }
-
-//     try {
-//       const decoded: any = jwt.verify(token, JWT_SECRET);
-
-//       // Admin only rule
-//       if (pathname.startsWith("/api/admin") && decoded.role !== "admin") {
-//         return NextResponse.json({ message: "Access denied" }, { status: 403 });
-//       }
-
-//       // Allow request to continue
-//       return NextResponse.next();
-
-//     } catch {
-//       return NextResponse.json({ message: "Invalid token" }, { status: 403 });
-//     }
-//   }
-
-//   return NextResponse.next();
-// }
+export const config = {
+  matcher: ["/dashboard/:path*", "/users/:path*"],
+};

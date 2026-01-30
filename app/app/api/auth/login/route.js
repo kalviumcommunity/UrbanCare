@@ -1,35 +1,20 @@
-import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
+"use client";
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
+export default function Login() {
+  const router = useRouter();
 
-  // (Assume user validation is already done)
+  const handleLogin = () => {
+    Cookies.set("token", "mock.jwt.token");
+    router.push("/dashboard");
+  };
 
-  const accessToken = jwt.sign(
-    { email, role: "user" },
-    ACCESS_SECRET,
-    { expiresIn: "15m" }
+  return (
+    <main style={{ padding: "20px" }}>
+      <h2>Login Page</h2>
+      <button onClick={handleLogin}>Login</button>
+    </main>
   );
-
-  const refreshToken = jwt.sign(
-    { email },
-    REFRESH_SECRET,
-    { expiresIn: "7d" }
-  );
-
-  const res = NextResponse.json({ accessToken });
-
-  // Store refresh token in HTTP-only cookie
-  res.cookies.set("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: true,
-    path: "/",
-  });
-
-  return res;
 }
