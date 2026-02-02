@@ -1,90 +1,52 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import redis from "@/lib/redis";
 import { sendSuccess, sendError } from "@/lib/responseHandler";
 import { ERROR_CODES } from "@/lib/errorCode";
 
-const prisma = new PrismaClient();
-
 /**
- * GET /api/complaints
+ * GET /api/complaints (Cached)
  */
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const page = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit")) || 10;
-
-  const complaints = await prisma.complaint.findMany({
-    skip: (page - 1) * limit,
-    take: limit,
-    orderBy: { createdAt: "desc" },
-  });
-
-  return sendSuccess(
-    { page, limit, complaints },
-    "Complaints fetched successfully"
-  );
-}
-
-/**
- * POST /api/complaints
- */
-export async function POST(req: Request) {
   try {
-    const { title, description, category, citizenId, mediaUrls } =
-      await req.json();
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 10;
 
-    if (!title || !description || !category || !citizenId) {
-      return sendError(
-        "Missing required fields",
-        ERROR_CODES.VALIDATION_ERROR,
-        400
+    const cacheKey = `complaints:list:page=${page}:limit=${limit}`;
+
+    // 1️⃣ Check Redis
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      console.log("⚡ Cache HIT:", cacheKey);
+      return sendSuccess(
+        JSON.parse(cached),
+        "Complaints fetched from cache"
       );
     }
 
-    const complaint = await prisma.$transaction(async (tx) => {
-      const created = await tx.complaint.create({
-        data: {
-          complaintId: `UC-${Date.now()}`,
-          title,
-          description,
-          category,
-          citizenId,
-          status: "SUBMITTED",
-        },
-      });
+    console.log("🐢 Cache MISS - Fetching from DB");
 
-      await tx.complaintStatusLog.create({
-        data: {
-          complaintId: created.id,
-          newStatus: "SUBMITTED",
-          updatedById: citizenId,
-          comment: "Complaint submitted",
-        },
-      });
-
-      if (Array.isArray(mediaUrls) && mediaUrls.length > 0) {
-        await tx.complaintMedia.createMany({
-          data: mediaUrls.map((url: string) => ({
-            complaintId: created.id,
-            url,
-            uploadedBy: citizenId,
-          })),
-        });
-      }
-
-      return created;
+    // 2️⃣ Fetch from DB
+    const complaints = await prisma.complaint.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: "desc" },
     });
 
-    return sendSuccess(
-      complaint,
-      "Complaint created successfully",
-      201
-    );
-  } catch (err) {
+    const response = { page, limit, complaints };
+
+    // 3️⃣ Store in cache (TTL 60s)
+    await redis.set(cacheKey, JSON.stringify(response), "EX", 60);
+
+    return sendSuccess(response, "Complaints fetched successfully");
+  } catch (error) {
+    console.error("❌ GET /api/complaints error:", error);
+
     return sendError(
-      "Failed to create complaint",
-      ERROR_CODES.DATABASE_ERROR,
+      "Failed to fetch complaints",
+      ERROR_CODES.INTERNAL_ERROR,
       500,
-      err
+      error instanceof Error ? error.message : error
     );
   }
 }
