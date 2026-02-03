@@ -1,4 +1,6 @@
-import Link from "next/link";
+import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { UIProvider } from "@/context/UIContext";
 
 export default function RootLayout({
   children,
@@ -8,13 +10,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <nav style={{ padding: "10px", background: "#eee" }}>
-          <Link href="/">Home</Link> |{" "}
-          <Link href="/login">Login</Link> |{" "}
-          <Link href="/dashboard">Dashboard</Link> |{" "}
-          <Link href="/users/1">User 1</Link>
-        </nav>
-        {children}
+        <AuthProvider>
+          <UIProvider>
+            {children}
+          </UIProvider>
+        </AuthProvider>
       </body>
     </html>
   );
