@@ -4,6 +4,6 @@ export const welcomeEmail = (name: string) => `
     <p>Your account has been created successfully.</p>
     <p>You can now raise complaints and track their status.</p>
     <br/>
-    <small>This is an automated email.</small>
+    <small>This is an automated email...</small>
   </div>
 `;
