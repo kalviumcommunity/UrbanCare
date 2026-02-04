@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { sendSuccess, sendError } from "@/lib/responseHandler";
 import { ERROR_CODES } from "@/lib/errorCode";
+import { sendEmail } from "@/app/lib/email";
+import { welcomeEmail } from "@/app/lib/emailTemplates";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
 
-    // Validate fields
+    // 1️⃣ Validate input
     if (!name || !email || !password) {
       return sendError(
         "All fields are required",
@@ -18,7 +20,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if user already exists
+    // 2️⃣ Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -31,10 +33,10 @@ export async function POST(req: Request) {
       );
     }
 
-    // Hash password
+    // 3️⃣ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // 4️⃣ Create user
     const user = await prisma.user.create({
       data: {
         name,
@@ -43,6 +45,14 @@ export async function POST(req: Request) {
       },
     });
 
+    // 5️⃣ Send welcome email (non-blocking is OK later)
+    await sendEmail(
+      email,
+      "Welcome to UrbanCare 🎉",
+      welcomeEmail(name)
+    );
+
+    // 6️⃣ Return response
     return sendSuccess(
       { id: user.id, email: user.email },
       "Signup successful",
